@@ -1,0 +1,9 @@
+Cyclistic’s bike share Dataset :
+
+The Cyclistic’s historical trip data  is used to analyze and identify trends.The dataset was downloaded
+from below path : 
+
+https://divvy-tripdata.s3.amazonaws.com/index.html
+
+Duration : December 2021 to November 2022 
+Format   : CSV files

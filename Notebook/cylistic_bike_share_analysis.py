@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[25]:
+# In[162]:
 
 
 #importing the libraries
 
-import numpy as np
 import pandas as pd
-import plotly.express as px
-
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-init_notebook_mode(connected=True)
+import matplotlib.pyplot as plt
+import seaborn as sns
+import matplotlib.ticker as mticker
 
 
 # In[3]:
@@ -170,6 +168,13 @@ tripdata_21_22 = tripdata_21_22.astype({'year':'int16', 'hour':'int8'})
 tripdata_21_22.head()
 
 
+# In[196]:
+
+
+#Setting style for chart
+sns.set_style("darkgrid")
+
+
 # In[27]:
 
 
@@ -184,23 +189,21 @@ tripdata_21_22.pivot_table(
 )
 
 
-# In[45]:
+# In[197]:
 
 
 plot_1 = tripdata_21_22.groupby(["member_casual","rideable_type"],as_index = False).count()
 
-fig1 = px.bar(plot_1,
-        y = 'rideable_type',
-        x = 'ride_id',
-        color = 'member_casual',
-        height = 300,
-        labels = {'member_casual':'member/casual'},
-        hover_name = 'member_casual',
-        hover_data = {'member_casual':False,'ride_id':False }
-        
-       )
-
-fig1.show(renderer='notebook')
+sns.barplot(data=plot_1, 
+            x='ride_id',
+            y='rideable_type',
+            hue="member_casual",
+            palette='magma',
+            saturation = .3)
+plt.xlabel("Number Of Rides",size = 10)
+plt.ylabel("Rideable Type",size = 10)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[29]:
@@ -217,21 +220,22 @@ pd.pivot_table(tripdata_21_22,
 )
 
 
-# In[46]:
+# In[198]:
 
 
 plot_2 = tripdata_21_22.groupby(['member_casual'], as_index=False).count()
 
-fig2 = px.bar(plot_2,
-       x='ride_id',
-       y="member_casual",
-       color = "member_casual",
-       height =300,
-       text = 'ride_id',
-       labels = {'ride_id' : 'no_of_rides' ,'member_casual':'member/casual'},
-       hover_name = 'member_casual',hover_data = {'member_casual' : False })
-
-fig2.show(renderer='notebook')
+sns.barplot(data=plot_2, 
+            x='ride_id',
+            y='member_casual',
+            hue="member_casual",
+            palette='magma',
+            saturation = .3,
+            orient='h')
+plt.xlabel("Number Of Rides",size = 10)
+plt.ylabel("Member / Casual",size = 10)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[31]:
@@ -248,22 +252,24 @@ pd.pivot_table(tripdata_21_22,
 )
 
 
-# In[47]:
+# In[199]:
 
 
 plot_3 = tripdata_21_22.groupby(['year','month','member_casual'],as_index = False).count()
 
-fig3 = px.line (plot_3,
-           x='month',
-           y='ride_id',
-           color = 'member_casual',
-           line_shape = 'spline',
-           markers = True,
-           labels = {'ride_id':'no_of_rides','month':'Months (dec 2021 - nov 2022)'},
-           hover_name = 'member_casual',
-           hover_data = {'member_casual':False,'month':False,'ride_id':True})
-
-fig3.show(renderer='notebook')
+sns.lineplot(data=plot_3, 
+            x='month',
+            y='ride_id',
+            hue="member_casual",
+            palette='magma',
+            style = "member_casual",
+            markers=True
+           )
+plt.xlabel("Months (dec 2021 - nov 2022)",size = 10)
+plt.ylabel("Number Of Rides",size = 10)
+plt.xticks(rotation=90)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[33]:
@@ -280,21 +286,24 @@ pd.pivot_table(tripdata_21_22,
 )
 
 
-# In[48]:
+# In[200]:
 
 
 plot_4 = tripdata_21_22.groupby(['day_of_week','member_casual'],as_index = False).count()
 
-fig4 = px.line(plot_4,
-        x = 'day_of_week',
-        y = 'ride_id',
-        color = 'member_casual',
-        markers = True,
-        labels = {'ride_id':'no_of_rides','day_of_week':'weekdays'},
-        hover_name = 'member_casual',
-        hover_data = {'member_casual':False,'day_of_week':False,'ride_id':True})
-
-fig4.show(renderer='notebook')
+sns.lineplot(data=plot_4, 
+            x='day_of_week',
+            y='ride_id',
+            hue="member_casual",
+            palette='magma',
+            style = "member_casual",
+            markers=True
+           )
+plt.xlabel("weekdays",size = 10)
+plt.ylabel("Number Of Rides",size = 10)
+plt.xticks(rotation=75)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[35]:
@@ -310,21 +319,23 @@ pd.pivot_table(tripdata_21_22,
               margins_name = 'Total Count')
 
 
-# In[49]:
+# In[201]:
 
 
 plot_5 = tripdata_21_22.groupby(['hour','member_casual'],as_index = False).count()
 
-fig5 = px.line(plot_5,
-        x = 'hour',
-        y = 'ride_id',
-        color = 'member_casual',
-        markers = True,
-        labels = {'ride_id':'no_of_rides','day_of_week':'weekdays'},
-        hover_name = 'member_casual',
-        hover_data = {'member_casual':False,'day_of_week':False,'ride_id':True})
-
-fig5.show(renderer='notebook')
+sns.lineplot(data=plot_5, 
+            x='hour',
+            y='ride_id',
+            hue="member_casual",
+            palette='magma',
+            style = "member_casual",
+            markers=True
+           )
+plt.xlabel("hour",size = 10)
+plt.ylabel("Number Of Rides",size = 10)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[37]:
@@ -341,21 +352,22 @@ pd.pivot_table(tripdata_21_22,
   )
 
 
-# In[50]:
+# In[202]:
 
 
 plot_6 = tripdata_21_22.groupby(['year','member_casual'],as_index = False).mean()
 
-fig6 = px.bar(plot_6,
-       x = 'ride_length',
-       y = 'member_casual',
-       color = 'member_casual',
-       height = 300,
-       labels = {'member_casual':'member/casual','ride_length':'avg ride length in minutes'},
-       hover_name = 'member_casual',
-       hover_data = {'member_casual':False , 'ride_length':True})
-
-fig6.show(renderer='notebook')
+sns.barplot(data=plot_6, 
+            x='ride_length',
+            y='member_casual',
+            hue="member_casual",
+            palette='magma',
+            saturation = .3,
+            orient='h')
+plt.xlabel("avg ride length in minutes",size = 10)
+plt.ylabel("Member / Casual",size = 10)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[39]:
@@ -366,21 +378,24 @@ fig6.show(renderer='notebook')
 tripdata_21_22.groupby(["month","member_casual"])[["ride_length"]].mean()
 
 
-# In[51]:
+# In[203]:
 
 
 plot_7 = tripdata_21_22.groupby(["month","member_casual"],as_index = False).mean()
 
-fig7 = px.line(plot_7,
-        x='month',
-        y= 'ride_length',
-        color = 'member_casual',
-        markers = True,
-        labels = {'member_casual':'member/casual','ride_length':'avg ride length in minutes'},
-        hover_name = 'member_casual',
-        hover_data = {'member_casual':False , 'ride_length':True})
-
-fig7.show(renderer='notebook')        
+sns.lineplot(data=plot_7, 
+            x='month',
+            y='ride_length',
+            hue="member_casual",
+            palette='magma',
+            style = "member_casual",
+            markers=True
+           )
+plt.xlabel("month",size = 10)
+plt.ylabel("avg ride length in minutes",size = 10)
+plt.xticks(rotation=90)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[41]:
@@ -391,22 +406,24 @@ fig7.show(renderer='notebook')
 tripdata_21_22.groupby(["day_of_week","member_casual"])[["ride_length"]].mean()
 
 
-# In[52]:
+# In[204]:
 
 
 plot_8 = tripdata_21_22.groupby(["day_of_week","member_casual"],as_index = False).mean()
 
-fig8 = px.line(plot_8,
-        x= 'day_of_week',
-        y= 'ride_length',
-        color = 'member_casual',
-        markers = True,
-        labels = {'member_casual':'member/casual','ride_length':'avg ride length in minutes'},
-       hover_name = 'member_casual',
-       hover_data = {'member_casual':False , 'ride_length':True}
-         )
-
-fig8.show(renderer='notebook')
+sns.lineplot(data=plot_8, 
+            x='day_of_week',
+            y='ride_length',
+            hue="member_casual",
+            palette='magma',
+            style = "member_casual",
+            markers=True
+           )
+plt.xlabel("month",size = 10)
+plt.ylabel("avg ride length in minutes",size = 10)
+plt.xticks(rotation=90)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
 
 # In[43]:
@@ -417,20 +434,22 @@ fig8.show(renderer='notebook')
 tripdata_21_22.groupby(["hour","member_casual"])[["ride_length"]].mean()
 
 
-# In[53]:
+# In[205]:
 
 
 plot_9 = tripdata_21_22.groupby(["hour","member_casual"],as_index = False).mean()
 
-fig9 = px.bar(plot_9,
-        x= 'hour',
-        y= 'ride_length',
-        color = 'member_casual',
-        barmode = 'group',
-        labels = {'member_casual':'member/casual','ride_length':'avg ride length in minutes'},
-       hover_name = 'member_casual',
-       hover_data = {'member_casual':False , 'ride_length':True}
-         )
-
-fig9.show(renderer='notebook')
+sns.lineplot(data=plot_9, 
+            x='hour',
+            y='ride_length',
+            hue="member_casual",
+            palette='magma',
+            style = "member_casual",
+            markers=True
+           )
+plt.xlabel("hours",size = 10)
+plt.ylabel("avg ride length in minutes",size = 10)
+plt.xticks(rotation=90)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title = 'Member / Casual')
+plt.show()
 
